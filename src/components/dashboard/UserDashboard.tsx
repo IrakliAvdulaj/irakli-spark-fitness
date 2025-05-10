@@ -97,8 +97,8 @@ export function UserDashboard() {
           
           // Also save meal plan in Supabase for future reference
           try {
-            // Fix: The issue is here - we need to pass an object, not an array
-            await supabase.from('meal_plans').upsert({
+            // Fixed: We need to pass an array containing one object to upsert
+            await supabase.from('meal_plans').upsert([{
               user_id: user.id,
               calories: calculatedData.calories,
               protein: calculatedData.protein,
@@ -108,7 +108,7 @@ export function UserDashboard() {
               lunch: calculatedData.mealPlan.lunch,
               dinner: calculatedData.mealPlan.dinner,
               snacks: calculatedData.mealPlan.snacks
-            }, {
+            }], {
               onConflict: 'user_id'
             });
           } catch (error) {

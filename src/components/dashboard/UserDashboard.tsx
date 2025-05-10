@@ -6,8 +6,9 @@ import { calculateFitnessData, FitnessData } from "@/utils/fitnessCalculator";
 import { NutritionSummary } from "./NutritionSummary";
 import { MealPlanView } from "./MealPlanView";
 import { MotivationalPosts } from "./MotivationalPosts";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 export function UserDashboard() {
   const [fitnessData, setFitnessData] = useState<FitnessData | null>(null);
@@ -16,38 +17,118 @@ export function UserDashboard() {
   const navigate = useNavigate();
   
   useEffect(() => {
-    // Check if user is logged in
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (!user.email) {
-      toast({
-        title: "Not authorized",
-        description: "Please login to access the dashboard",
-        variant: "destructive",
-      });
-      navigate("/login");
-      return;
+    async function fetchUserData() {
+      try {
+        // Check if user is authenticated
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (!user) {
+          toast({
+            title: "Not authorized",
+            description: "Please login to access the dashboard",
+            variant: "destructive",
+          });
+          navigate("/login");
+          return;
+        }
+        
+        // Fetch user profile from Supabase
+        const { data: profileData, error: profileError } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+        
+        if (profileError) {
+          // If no profile found, check if they completed onboarding in localStorage
+          const hasCompletedOnboarding = localStorage.getItem(`onboarding-${user.email}`);
+          
+          if (!hasCompletedOnboarding) {
+            navigate("/onboarding");
+            return;
+          }
+          
+          // If they have completed onboarding but no Supabase profile, use localStorage data
+          const localUserDataString = localStorage.getItem(`userData-${user.email}`);
+          if (localUserDataString) {
+            const localUserData = JSON.parse(localUserDataString);
+            setUserData(localUserData);
+            
+            // Calculate fitness data from localStorage data
+            const calculatedData = calculateFitnessData(localUserData);
+            setFitnessData(calculatedData);
+            
+            // Save to Supabase for future use
+            try {
+              await supabase.from('user_profiles').insert({
+                user_id: user.id,
+                height: parseFloat(localUserData.height),
+                weight: parseFloat(localUserData.weight),
+                age: parseInt(localUserData.age),
+                sex: localUserData.sex,
+                activity_level: localUserData.activityLevel,
+                goal: localUserData.goal,
+                goal_amount: localUserData.goalAmount ? parseFloat(localUserData.goalAmount) : 0
+              });
+            } catch (error) {
+              console.error("Error saving profile to Supabase:", error);
+            }
+          } else {
+            navigate("/onboarding");
+            return;
+          }
+        } else {
+          // Found profile in Supabase, use that data
+          const formattedUserData = {
+            height: profileData.height.toString(),
+            weight: profileData.weight.toString(),
+            age: profileData.age.toString(),
+            sex: profileData.sex,
+            activityLevel: profileData.activity_level,
+            goal: profileData.goal,
+            goalAmount: profileData.goal_amount.toString()
+          };
+          
+          setUserData(formattedUserData);
+          
+          // Calculate fitness data
+          const calculatedData = calculateFitnessData(formattedUserData);
+          setFitnessData(calculatedData);
+          
+          // Also save meal plan in Supabase for future reference
+          try {
+            await supabase.from('meal_plans').upsert({
+              user_id: user.id,
+              calories: calculatedData.calories,
+              protein: calculatedData.protein,
+              carbs: calculatedData.carbs,
+              fat: calculatedData.fat,
+              breakfast: calculatedData.mealPlan.breakfast,
+              lunch: calculatedData.mealPlan.lunch,
+              dinner: calculatedData.mealPlan.dinner,
+              snacks: calculatedData.mealPlan.snacks
+            }, {
+              onConflict: 'user_id'
+            });
+          } catch (error) {
+            console.error("Error saving meal plan to Supabase:", error);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load your fitness data",
+          variant: "destructive",
+        });
+      }
     }
     
-    // Check if user has completed onboarding
-    const hasCompletedOnboarding = localStorage.getItem(`onboarding-${user.email}`);
-    if (!hasCompletedOnboarding) {
-      navigate("/onboarding");
-      return;
-    }
-    
-    // Get user data and calculate fitness metrics
-    const userDataString = localStorage.getItem(`userData-${user.email}`);
-    if (userDataString) {
-      const parsedUserData = JSON.parse(userDataString);
-      setUserData(parsedUserData);
-      
-      // Calculate fitness data
-      const calculatedData = calculateFitnessData(parsedUserData);
-      setFitnessData(calculatedData);
-    }
+    fetchUserData();
   }, [navigate, toast]);
   
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     localStorage.removeItem("user");
     toast({
       title: "Logged out",

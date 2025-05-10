@@ -6,6 +6,7 @@ interface UserData {
   sex: string;
   activityLevel: string;
   goal: string;
+  goalAmount?: string;
 }
 
 export interface FitnessData {
@@ -23,6 +24,7 @@ export interface Meal {
   carbs: number;
   fat: number;
   description: string;
+  portions?: number;
 }
 
 export interface MealPlan {
@@ -38,6 +40,7 @@ export function calculateFitnessData(userData: UserData): FitnessData {
   const weight = parseFloat(userData.weight);
   const age = parseFloat(userData.age);
   const isMale = userData.sex === 'male';
+  const goalAmount = userData.goalAmount ? parseFloat(userData.goalAmount) : 0;
   
   // Calculate Basal Metabolic Rate (BMR) using Mifflin-St Jeor Equation
   let bmr;
@@ -61,32 +64,47 @@ export function calculateFitnessData(userData: UserData): FitnessData {
   // Total Daily Energy Expenditure (TDEE)
   let tdee = bmr * activityMultiplier;
   
-  // Adjust calories based on goal
+  // Calculate calories based on goal and goal amount
+  // 1kg of fat is approximately 7700 calories
+  // So to lose/gain 0.5kg per week, we need a deficit/surplus of 3850 calories per week, or 550 per day
   let calories;
   switch (userData.goal) {
-    case 'lose': calories = tdee - 500; break;     // Deficit for weight loss
-    case 'gain': calories = tdee + 500; break;     // Surplus for weight gain
-    case 'maintain': calories = tdee; break;       // Maintenance
-    default: calories = tdee;
+    case 'lose': 
+      calories = tdee - (goalAmount * 7700) / 7; // Daily calorie deficit based on weekly goal
+      break;
+    case 'gain': 
+      calories = tdee + (goalAmount * 7700) / 7; // Daily calorie surplus based on weekly goal
+      break;
+    case 'maintain': 
+      calories = tdee;
+      break;
+    default: 
+      calories = tdee;
   }
+  
+  // Set minimum calories based on gender to ensure health
+  const minCalories = isMale ? 1500 : 1200;
+  calories = Math.max(calories, minCalories);
   
   // Calculate macros
-  // Protein: 2g per kg of body weight (more for weight loss and gain)
-  let proteinRatio;
-  switch (userData.goal) {
-    case 'lose': proteinRatio = 0.4; break;        // 40% of calories from protein
-    case 'gain': proteinRatio = 0.3; break;        // 30% of calories from protein
-    case 'maintain': proteinRatio = 0.3; break;    // 30% of calories from protein
-    default: proteinRatio = 0.3;
-  }
+  let proteinRatio, fatRatio;
   
-  // Fat: minimum 20% of calories
-  let fatRatio;
   switch (userData.goal) {
-    case 'lose': fatRatio = 0.3; break;            // 30% of calories from fat
-    case 'gain': fatRatio = 0.25; break;           // 25% of calories from fat
-    case 'maintain': fatRatio = 0.25; break;       // 25% of calories from fat
-    default: fatRatio = 0.25;
+    case 'lose': 
+      proteinRatio = 0.4;        // 40% of calories from protein
+      fatRatio = 0.3;            // 30% of calories from fat
+      break;
+    case 'gain': 
+      proteinRatio = 0.3;        // 30% of calories from protein
+      fatRatio = 0.25;           // 25% of calories from fat
+      break;
+    case 'maintain': 
+      proteinRatio = 0.3;        // 30% of calories from protein
+      fatRatio = 0.25;           // 25% of calories from fat
+      break;
+    default: 
+      proteinRatio = 0.3;
+      fatRatio = 0.25;
   }
   
   // Carbs: remaining calories
@@ -97,8 +115,8 @@ export function calculateFitnessData(userData: UserData): FitnessData {
   const fat = Math.round((calories * fatRatio) / 9);         // 9 calories per gram of fat
   const carbs = Math.round((calories * carbRatio) / 4);      // 4 calories per gram of carbs
   
-  // Generate a basic meal plan based on the macros
-  const mealPlan = generateMealPlan(calories, protein, carbs, fat, userData.goal);
+  // Generate a meal plan based on the macros and goal
+  const mealPlan = generateMealPlan(calories, protein, carbs, fat, userData.goal, weight);
   
   return {
     calories: Math.round(calories),
@@ -114,36 +132,69 @@ function generateMealPlan(
   totalProtein: number, 
   totalCarbs: number, 
   totalFat: number, 
-  goal: string
+  goal: string,
+  weight: number
 ): MealPlan {
-  // Simple distribution of macros throughout the day
-  const breakfastRatio = 0.25;  // 25% of daily intake
-  const lunchRatio = 0.35;      // 35% of daily intake
-  const dinnerRatio = 0.3;      // 30% of daily intake
-  const snacksRatio = 0.1;      // 10% of daily intake
+  // Determine meal distribution based on calorie level and goal
+  let breakfastRatio, lunchRatio, dinnerRatio, snacksRatio;
   
-  // Pre-defined meal templates that we'll adjust based on macros
+  if (totalCalories < 1600) {
+    // For lower calorie plans, less snacking
+    breakfastRatio = 0.25;
+    lunchRatio = 0.35;
+    dinnerRatio = 0.35;
+    snacksRatio = 0.05;
+  } else if (totalCalories > 2500) {
+    // For higher calorie plans, more frequent eating
+    breakfastRatio = 0.2;
+    lunchRatio = 0.3;
+    dinnerRatio = 0.3;
+    snacksRatio = 0.2; // More snacks for higher calorie needs
+  } else {
+    // Standard distribution
+    breakfastRatio = 0.25;
+    lunchRatio = 0.35;
+    dinnerRatio = 0.3;
+    snacksRatio = 0.1;
+  }
+  
+  // Meal options database - these will be selected based on goals and adjusted for portions
   const breakfastOptions = [
     {
       name: "Protein Oatmeal",
       description: "Oatmeal with protein powder, berries, and nuts",
       baseProtein: 20,
       baseCarbs: 30,
-      baseFat: 10
+      baseFat: 10,
+      baseCalories: 290, // Calculated from macros
+      scaleFactor: 1, // Will be adjusted based on calorie needs
     },
     {
       name: "Greek Yogurt Parfait",
       description: "Greek yogurt with granola, honey, and mixed berries",
       baseProtein: 15,
       baseCarbs: 25,
-      baseFat: 8
+      baseFat: 8,
+      baseCalories: 228,
+      scaleFactor: 1,
     },
     {
       name: "Veggie Egg Scramble",
       description: "Eggs scrambled with spinach, bell peppers, and feta cheese",
       baseProtein: 18,
       baseCarbs: 8,
-      baseFat: 12
+      baseFat: 12,
+      baseCalories: 212,
+      scaleFactor: 1,
+    },
+    {
+      name: "Protein Pancakes",
+      description: "High-protein pancakes with berries and light syrup",
+      baseProtein: 25,
+      baseCarbs: 30,
+      baseFat: 7,
+      baseCalories: 283,
+      scaleFactor: 1,
     }
   ];
   
@@ -153,21 +204,36 @@ function generateMealPlan(
       description: "Mixed greens with grilled chicken, avocado, and light dressing",
       baseProtein: 30,
       baseCarbs: 15,
-      baseFat: 15
+      baseFat: 15,
+      baseCalories: 315,
+      scaleFactor: 1,
     },
     {
       name: "Turkey Wrap",
       description: "Whole grain wrap with turkey, hummus, and vegetables",
       baseProtein: 25,
       baseCarbs: 35,
-      baseFat: 10
+      baseFat: 10,
+      baseCalories: 330,
+      scaleFactor: 1,
     },
     {
       name: "Quinoa Bowl",
       description: "Quinoa with roasted vegetables, chickpeas, and tahini sauce",
       baseProtein: 18,
       baseCarbs: 40,
-      baseFat: 12
+      baseFat: 12,
+      baseCalories: 340,
+      scaleFactor: 1,
+    },
+    {
+      name: "Tuna Salad Sandwich",
+      description: "Light tuna salad on whole grain bread with lettuce and tomato",
+      baseProtein: 28,
+      baseCarbs: 30,
+      baseFat: 8,
+      baseCalories: 304,
+      scaleFactor: 1,
     }
   ];
   
@@ -177,21 +243,36 @@ function generateMealPlan(
       description: "Baked salmon with roasted asparagus and sweet potatoes",
       baseProtein: 30,
       baseCarbs: 25,
-      baseFat: 15
+      baseFat: 15,
+      baseCalories: 355,
+      scaleFactor: 1,
     },
     {
       name: "Lean Beef Stir Fry",
       description: "Stir-fried lean beef with mixed vegetables and brown rice",
       baseProtein: 35,
       baseCarbs: 30,
-      baseFat: 10
+      baseFat: 10,
+      baseCalories: 350,
+      scaleFactor: 1,
     },
     {
       name: "Veggie and Bean Chili",
       description: "Hearty bean chili with mixed vegetables and avocado",
       baseProtein: 20,
       baseCarbs: 35,
-      baseFat: 12
+      baseFat: 12,
+      baseCalories: 324,
+      scaleFactor: 1,
+    },
+    {
+      name: "Grilled Fish Tacos",
+      description: "Grilled fish in corn tortillas with cabbage slaw and lime",
+      baseProtein: 25,
+      baseCarbs: 30,
+      baseFat: 10,
+      baseCalories: 310,
+      scaleFactor: 1,
     }
   ];
   
@@ -201,28 +282,45 @@ function generateMealPlan(
       description: "Protein shake with banana and almond butter",
       baseProtein: 25,
       baseCarbs: 15,
-      baseFat: 8
+      baseFat: 8,
+      baseCalories: 232,
+      scaleFactor: 1,
     },
     {
       name: "Greek Yogurt with Berries",
       description: "Greek yogurt with mixed berries and a drizzle of honey",
       baseProtein: 12,
       baseCarbs: 15,
-      baseFat: 3
+      baseFat: 3,
+      baseCalories: 135,
+      scaleFactor: 1,
     },
     {
       name: "Nuts and Fruit",
       description: "Mixed nuts with an apple or orange",
       baseProtein: 6,
       baseCarbs: 15,
-      baseFat: 12
+      baseFat: 12,
+      baseCalories: 192,
+      scaleFactor: 1,
     },
     {
       name: "Hummus with Veggies",
       description: "Hummus with carrot and cucumber sticks",
       baseProtein: 5,
       baseCarbs: 12,
-      baseFat: 7
+      baseFat: 7,
+      baseCalories: 131,
+      scaleFactor: 1,
+    },
+    {
+      name: "Protein Bar",
+      description: "High-protein, low-sugar protein bar",
+      baseProtein: 20,
+      baseCarbs: 15,
+      baseFat: 7,
+      baseCalories: 203,
+      scaleFactor: 1,
     }
   ];
   
@@ -230,66 +328,124 @@ function generateMealPlan(
   const getRandomItem = (array: any[]) => array[Math.floor(Math.random() * array.length)];
   
   let breakfastTemplate, lunchTemplate, dinnerTemplate;
+  let snackTemplates: any[] = [];
   
   if (goal === 'lose') {
     // For weight loss, favor higher protein, lower carb options
-    breakfastTemplate = breakfastOptions[Math.floor(Math.random() * 2)]; // Protein Oatmeal or Greek Yogurt
-    lunchTemplate = lunchOptions[0]; // Grilled Chicken Salad
-    dinnerTemplate = dinnerOptions[0]; // Salmon with Vegetables
+    breakfastTemplate = getRandomItem([breakfastOptions[0], breakfastOptions[2], breakfastOptions[3]]); 
+    lunchTemplate = getRandomItem([lunchOptions[0], lunchOptions[3]]);
+    dinnerTemplate = getRandomItem([dinnerOptions[0], dinnerOptions[3]]);
+    
+    // Select 1-2 snacks based on calories
+    if (totalCalories < 1600) {
+      snackTemplates = [getRandomItem([snackOptions[1], snackOptions[3]])]; // Lower calorie snacks
+    } else {
+      snackTemplates = [
+        getRandomItem([snackOptions[1], snackOptions[3]]),
+        snackOptions[0] // Protein shake for satiety
+      ];
+    }
   } else if (goal === 'gain') {
-    // For weight gain, include more carbs
-    breakfastTemplate = breakfastOptions[0]; // Protein Oatmeal
-    lunchTemplate = lunchOptions[1]; // Turkey Wrap
-    dinnerTemplate = dinnerOptions[1]; // Lean Beef Stir Fry
+    // For weight gain, include more carbs and calorie-dense options
+    breakfastTemplate = getRandomItem([breakfastOptions[0], breakfastOptions[3]]); 
+    lunchTemplate = getRandomItem([lunchOptions[1], lunchOptions[2]]);
+    dinnerTemplate = getRandomItem([dinnerOptions[1], dinnerOptions[2]]);
+    
+    // More snacks for weight gain
+    snackTemplates = [
+      snackOptions[0], // Protein shake
+      getRandomItem([snackOptions[2], snackOptions[4]]) // Calorie-dense snacks
+    ];
+    
+    if (totalCalories > 2800) {
+      // Add a third snack for very high calorie needs
+      snackTemplates.push(getRandomItem([snackOptions[1], snackOptions[2]]));
+    }
   } else {
     // For maintenance, balanced options
     breakfastTemplate = getRandomItem(breakfastOptions);
     lunchTemplate = getRandomItem(lunchOptions);
     dinnerTemplate = getRandomItem(dinnerOptions);
+    
+    // Select 1-2 snacks based on calories
+    if (totalCalories < 2000) {
+      snackTemplates = [getRandomItem(snackOptions)];
+    } else {
+      snackTemplates = [
+        getRandomItem([snackOptions[0], snackOptions[1]]),
+        getRandomItem([snackOptions[2], snackOptions[3], snackOptions[4]])
+      ];
+    }
   }
   
-  // Calculate calories and macros for each meal
+  // Scale meal portions based on calorie and macro targets
+  const breakfastTargetCal = totalCalories * breakfastRatio;
+  const lunchTargetCal = totalCalories * lunchRatio;
+  const dinnerTargetCal = totalCalories * dinnerRatio;
+  
+  // Calculate scale factor for each meal
+  const breakfastScale = breakfastTargetCal / breakfastTemplate.baseCalories;
+  const lunchScale = lunchTargetCal / lunchTemplate.baseCalories;
+  const dinnerScale = dinnerTargetCal / dinnerTemplate.baseCalories;
+  
+  // Create scaled meals
   const breakfast: Meal = {
     name: breakfastTemplate.name,
     description: breakfastTemplate.description,
-    calories: Math.round(totalCalories * breakfastRatio),
-    protein: Math.round(totalProtein * breakfastRatio),
-    carbs: Math.round(totalCarbs * breakfastRatio),
-    fat: Math.round(totalFat * breakfastRatio)
+    calories: Math.round(breakfastTemplate.baseCalories * breakfastScale),
+    protein: Math.round(breakfastTemplate.baseProtein * breakfastScale),
+    carbs: Math.round(breakfastTemplate.baseCarbs * breakfastScale),
+    fat: Math.round(breakfastTemplate.baseFat * breakfastScale),
+    portions: Math.round(breakfastScale * 10) / 10 // Round to 1 decimal place
   };
   
   const lunch: Meal = {
     name: lunchTemplate.name,
     description: lunchTemplate.description,
-    calories: Math.round(totalCalories * lunchRatio),
-    protein: Math.round(totalProtein * lunchRatio),
-    carbs: Math.round(totalCarbs * lunchRatio),
-    fat: Math.round(totalFat * lunchRatio)
+    calories: Math.round(lunchTemplate.baseCalories * lunchScale),
+    protein: Math.round(lunchTemplate.baseProtein * lunchScale),
+    carbs: Math.round(lunchTemplate.baseCarbs * lunchScale),
+    fat: Math.round(lunchTemplate.baseFat * lunchScale),
+    portions: Math.round(lunchScale * 10) / 10
   };
   
   const dinner: Meal = {
     name: dinnerTemplate.name,
     description: dinnerTemplate.description,
-    calories: Math.round(totalCalories * dinnerRatio),
-    protein: Math.round(totalProtein * dinnerRatio),
-    carbs: Math.round(totalCarbs * dinnerRatio),
-    fat: Math.round(totalFat * dinnerRatio)
+    calories: Math.round(dinnerTemplate.baseCalories * dinnerScale),
+    protein: Math.round(dinnerTemplate.baseProtein * dinnerScale),
+    carbs: Math.round(dinnerTemplate.baseCarbs * dinnerScale),
+    fat: Math.round(dinnerTemplate.baseFat * dinnerScale),
+    portions: Math.round(dinnerScale * 10) / 10
   };
   
-  // Select 2 snacks
-  const selectedSnacks = snackOptions.slice(0, 2).map(snack => ({
-    name: snack.name,
-    description: snack.description,
-    calories: Math.round(totalCalories * snacksRatio / 2),
-    protein: Math.round(totalProtein * snacksRatio / 2),
-    carbs: Math.round(totalCarbs * snacksRatio / 2),
-    fat: Math.round(totalFat * snacksRatio / 2)
-  }));
+  // Calculate remaining calories for snacks
+  const allocatedCalories = breakfast.calories + lunch.calories + dinner.calories;
+  const remainingCalories = totalCalories - allocatedCalories;
+  
+  // Distribute remaining calories among snacks
+  let snacks: Meal[] = [];
+  if (snackTemplates.length > 0) {
+    const caloriesPerSnack = remainingCalories / snackTemplates.length;
+    
+    snacks = snackTemplates.map(snack => {
+      const snackScale = caloriesPerSnack / snack.baseCalories;
+      return {
+        name: snack.name,
+        description: snack.description,
+        calories: Math.round(snack.baseCalories * snackScale),
+        protein: Math.round(snack.baseProtein * snackScale),
+        carbs: Math.round(snack.baseCarbs * snackScale),
+        fat: Math.round(snack.baseFat * snackScale),
+        portions: Math.round(snackScale * 10) / 10
+      };
+    });
+  }
   
   return {
     breakfast,
     lunch,
     dinner,
-    snacks: selectedSnacks
+    snacks
   };
 }

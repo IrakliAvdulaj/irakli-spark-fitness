@@ -17,8 +17,9 @@ import {
   SelectTrigger, 
   SelectValue 
 } from "@/components/ui/select";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 export function Onboarding() {
   const [step, setStep] = useState(1);
@@ -28,7 +29,8 @@ export function Onboarding() {
     age: "",
     sex: "",
     activityLevel: "",
-    goal: ""
+    goal: "",
+    goalAmount: "0"
   });
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
@@ -43,13 +45,35 @@ export function Onboarding() {
     setUserData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
-    // In a real app, this would save the data to a database
-    setTimeout(() => {
-      const user = JSON.parse(localStorage.getItem("user") || "{}");
+    try {
+      // Get current authenticated user
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error("Not authenticated");
+      }
+      
+      // Store user data in Supabase
+      const { error } = await supabase.from('user_profiles').insert({
+        user_id: user.id,
+        height: parseFloat(userData.height),
+        weight: parseFloat(userData.weight),
+        age: parseInt(userData.age),
+        sex: userData.sex,
+        activity_level: userData.activityLevel,
+        goal: userData.goal,
+        goal_amount: parseFloat(userData.goalAmount)
+      });
+      
+      if (error) {
+        throw error;
+      }
+      
+      // Also store in localStorage for backward compatibility
       localStorage.setItem(`onboarding-${user.email}`, "completed");
       localStorage.setItem(`userData-${user.email}`, JSON.stringify(userData));
       
@@ -59,7 +83,14 @@ export function Onboarding() {
         description: "Your fitness profile has been created successfully.",
       });
       navigate("/dashboard");
-    }, 1500);
+    } catch (error: any) {
+      setLoading(false);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to save profile data",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleNext = () => {
@@ -78,6 +109,50 @@ export function Onboarding() {
 
   const handleBack = () => {
     setStep(prev => prev - 1);
+  };
+
+  const renderGoalAmountField = () => {
+    if (!userData.goal) return null;
+    
+    let label = "", placeholder = "", description = "";
+    
+    switch (userData.goal) {
+      case "lose":
+        label = "Weight to lose per week";
+        placeholder = "0.5";
+        description = "kg (0.1 to 1.2 kg)";
+        break;
+      case "gain":
+        label = "Weight to gain per week";
+        placeholder = "0.5";
+        description = "kg (0.1 to 1.2 kg)";
+        break;
+      case "maintain":
+        return null;
+      default:
+        return null;
+    }
+    
+    return (
+      <div className="space-y-2">
+        <label htmlFor="goalAmount" className="text-sm font-medium">{label}</label>
+        <div className="flex items-center">
+          <Input
+            id="goalAmount"
+            name="goalAmount"
+            type="number"
+            placeholder={placeholder}
+            value={userData.goalAmount}
+            onChange={handleChange}
+            min="0.1"
+            max="1.2"
+            step="0.1"
+            className="bg-secondary/50"
+          />
+          <span className="ml-2 text-sm text-muted-foreground">{description}</span>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -146,7 +221,6 @@ export function Onboarding() {
                     <SelectContent>
                       <SelectItem value="male">Male</SelectItem>
                       <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -190,6 +264,7 @@ export function Onboarding() {
                   </SelectContent>
                 </Select>
               </div>
+              {renderGoalAmountField()}
             </div>
           )}
         </CardContent>

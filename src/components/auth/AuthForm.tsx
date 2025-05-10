@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 type AuthFormProps = {
   isLogin?: boolean;
@@ -17,50 +18,77 @@ export function AuthForm({ isLogin = true }: AuthFormProps) {
   const { toast } = useToast();
   const navigate = useNavigate();
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
-    // This is a mock authentication for now - in a real app, this would connect to an authentication service
-    setTimeout(() => {
-      setLoading(false);
-      
-      // Mock admin login
-      if (email === "avdulajirakli@gmail.com") {
-        localStorage.setItem("user", JSON.stringify({ email, isAdmin: true }));
-        toast({
-          title: "Welcome back, Coach Irakli!",
-          description: "You've been logged in as an administrator.",
-        });
-        navigate("/admin-dashboard");
-        return;
-      }
-      
+    try {
       if (isLogin) {
-        // Mock regular user login
-        localStorage.setItem("user", JSON.stringify({ email, isAdmin: false }));
+        // Handle login
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+        
+        if (error) throw error;
+        
+        // Special case for admin
+        if (email === "avdulajirakli@gmail.com") {
+          toast({
+            title: "Welcome back, Coach Irakli!",
+            description: "You've been logged in as an administrator.",
+          });
+          navigate("/admin-dashboard");
+          return;
+        }
+        
         toast({
           title: "Welcome back!",
           description: "You've been logged in successfully.",
         });
         
         // Check if user has completed onboarding
-        const hasCompletedOnboarding = localStorage.getItem(`onboarding-${email}`);
-        if (hasCompletedOnboarding) {
+        const { data: profileData } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('user_id', data.user.id)
+          .single();
+        
+        if (profileData) {
           navigate("/dashboard");
         } else {
-          navigate("/onboarding");
+          // Check legacy localStorage
+          const hasCompletedOnboarding = localStorage.getItem(`onboarding-${email}`);
+          if (hasCompletedOnboarding) {
+            navigate("/dashboard");
+          } else {
+            navigate("/onboarding");
+          }
         }
       } else {
-        // Mock registration
-        localStorage.setItem("user", JSON.stringify({ email, isAdmin: false }));
+        // Handle registration
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password
+        });
+        
+        if (error) throw error;
+        
         toast({
           title: "Account created!",
           description: "Your account has been created successfully.",
         });
         navigate("/onboarding");
       }
-    }, 1500);
+    } catch (error: any) {
+      toast({
+        title: "Authentication error",
+        description: error.error_description || error.message || "An error occurred during authentication",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
   
   return (

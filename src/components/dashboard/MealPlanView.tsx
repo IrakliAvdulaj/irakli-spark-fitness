@@ -24,7 +24,10 @@ export function MealPlanView({ mealPlan }: MealPlanViewProps) {
           <CardContent className="space-y-6">
             {mealPlan.snacks.map((snack, index) => (
               <div key={index} className="space-y-2">
-                <h4 className="font-medium">{snack.name}</h4>
+                <div className="flex justify-between items-center">
+                  <h4 className="font-medium">{snack.name}</h4>
+                  {snack.portions && <span className="text-xs bg-secondary/60 rounded-full px-2 py-1">{snack.portions}x portion</span>}
+                </div>
                 <p className="text-sm text-muted-foreground">{snack.description}</p>
                 <div className="grid grid-cols-3 gap-2 text-xs">
                   <div>
@@ -61,7 +64,10 @@ function MealCard({ title, meal }: MealCardProps) {
   return (
     <Card className="glass-card">
       <CardHeader>
-        <CardTitle className="text-lg">{title}</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-lg">{title}</CardTitle>
+          {meal.portions && <span className="text-xs bg-secondary/60 rounded-full px-2 py-1">{meal.portions}x portion</span>}
+        </div>
         <CardDescription>{meal.name}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

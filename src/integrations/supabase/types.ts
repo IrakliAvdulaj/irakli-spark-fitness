@@ -9,6 +9,51 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      meal_plans: {
+        Row: {
+          breakfast: Json
+          calories: number
+          carbs: number
+          created_at: string
+          dinner: Json
+          fat: number
+          id: string
+          lunch: Json
+          protein: number
+          snacks: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          breakfast: Json
+          calories: number
+          carbs: number
+          created_at?: string
+          dinner: Json
+          fat: number
+          id?: string
+          lunch: Json
+          protein: number
+          snacks: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          breakfast?: Json
+          calories?: number
+          carbs?: number
+          created_at?: string
+          dinner?: Json
+          fat?: number
+          id?: string
+          lunch?: Json
+          protein?: number
+          snacks?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       notes: {
         Row: {
           content: string
@@ -36,6 +81,48 @@ export type Database = {
           title?: string
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          activity_level: string
+          age: number
+          created_at: string
+          goal: string
+          goal_amount: number
+          height: number
+          id: string
+          sex: string
+          updated_at: string
+          user_id: string
+          weight: number
+        }
+        Insert: {
+          activity_level: string
+          age: number
+          created_at?: string
+          goal: string
+          goal_amount?: number
+          height: number
+          id?: string
+          sex: string
+          updated_at?: string
+          user_id: string
+          weight: number
+        }
+        Update: {
+          activity_level?: string
+          age?: number
+          created_at?: string
+          goal?: string
+          goal_amount?: number
+          height?: number
+          id?: string
+          sex?: string
+          updated_at?: string
+          user_id?: string
+          weight?: number
         }
         Relationships: []
       }

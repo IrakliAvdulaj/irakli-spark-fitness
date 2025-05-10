@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,6 +8,7 @@ import { MotivationalPosts } from "./MotivationalPosts";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Json } from "@/integrations/supabase/types";
 
 export function UserDashboard() {
   const [fitnessData, setFitnessData] = useState<FitnessData | null>(null);
@@ -97,18 +97,18 @@ export function UserDashboard() {
           
           // Also save meal plan in Supabase for future reference
           try {
-            // Fixed: We need to pass an array containing one object to upsert
-            await supabase.from('meal_plans').upsert([{
+            // Fix: Convert meal objects to JSON-compatible format and use a single object
+            await supabase.from('meal_plans').upsert({
               user_id: user.id,
               calories: calculatedData.calories,
               protein: calculatedData.protein,
               carbs: calculatedData.carbs,
               fat: calculatedData.fat,
-              breakfast: calculatedData.mealPlan.breakfast,
-              lunch: calculatedData.mealPlan.lunch,
-              dinner: calculatedData.mealPlan.dinner,
-              snacks: calculatedData.mealPlan.snacks
-            }], {
+              breakfast: calculatedData.mealPlan.breakfast as unknown as Json,
+              lunch: calculatedData.mealPlan.lunch as unknown as Json,
+              dinner: calculatedData.mealPlan.dinner as unknown as Json,
+              snacks: calculatedData.mealPlan.snacks as unknown as Json
+            }, {
               onConflict: 'user_id'
             });
           } catch (error) {

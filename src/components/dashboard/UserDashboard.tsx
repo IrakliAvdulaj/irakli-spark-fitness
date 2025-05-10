@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,6 +12,7 @@ import { Json } from "@/integrations/supabase/types";
 import { Button } from "@/components/ui/button";
 import { MacronutrientChart } from "./MacronutrientChart";
 import { UpdateProfileForm } from "./UpdateProfileForm";
+import { HomeButton } from "@/components/navigation/HomeButton";
 
 export function UserDashboard() {
   const [fitnessData, setFitnessData] = useState<FitnessData | null>(null);
@@ -170,12 +170,15 @@ export function UserDashboard() {
           <h1 className="text-3xl font-bold text-gradient">
             Update Your Profile
           </h1>
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 bg-secondary/60 hover:bg-secondary rounded-md text-sm"
-          >
-            Logout
-          </button>
+          <div className="flex items-center gap-2">
+            <HomeButton />
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-secondary/60 hover:bg-secondary rounded-md text-sm"
+            >
+              Logout
+            </button>
+          </div>
         </div>
         
         <UpdateProfileForm 
@@ -193,7 +196,8 @@ export function UserDashboard() {
         <h1 className="text-3xl font-bold text-gradient">
           Your Fitness Dashboard
         </h1>
-        <div className="space-x-4">
+        <div className="flex items-center gap-2">
+          <HomeButton />
           <Button 
             variant="outline" 
             onClick={() => setIsUpdating(true)}

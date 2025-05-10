@@ -32,7 +32,10 @@ export function AuthForm({ isLogin = true }: AuthFormProps) {
         
         if (error) throw error;
         
-        // Check if admin email - IMPORTANT: Using lowercase to make the check case-insensitive
+        // Store user data in localStorage for future reference
+        localStorage.setItem("user", JSON.stringify(data.user));
+        
+        // Check if admin email - convert to lowercase for case-insensitive comparison
         if (email.toLowerCase() === "avdulajirakli@gmail.com") {
           // Set admin flag in localStorage for future auth checks
           localStorage.setItem("isAdmin", "true");
@@ -79,6 +82,9 @@ export function AuthForm({ isLogin = true }: AuthFormProps) {
         });
         
         if (error) throw error;
+        
+        // Store user data for future reference
+        localStorage.setItem("user", JSON.stringify(data.user));
         
         toast({
           title: "Account created!",

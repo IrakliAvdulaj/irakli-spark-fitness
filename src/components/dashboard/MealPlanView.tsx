@@ -1,6 +1,13 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { MealPlan, Meal } from "@/utils/fitnessCalculator";
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { HelpCircle } from "lucide-react";
 
 interface MealPlanViewProps {
   mealPlan: MealPlan;
@@ -26,7 +33,21 @@ export function MealPlanView({ mealPlan }: MealPlanViewProps) {
               <div key={index} className="space-y-2">
                 <div className="flex justify-between items-center">
                   <h4 className="font-medium">{snack.name}</h4>
-                  {snack.portions && <span className="text-xs bg-secondary/60 rounded-full px-2 py-1">{snack.portions}x portion</span>}
+                  {snack.portions && (
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs bg-secondary/60 rounded-full px-2 py-1">{snack.portions}x portion</span>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="h-4 w-4 text-muted-foreground cursor-pointer" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p className="text-xs">A single portion equals approximately {snack.singleServing || 100}g</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  )}
                 </div>
                 <p className="text-sm text-muted-foreground">{snack.description}</p>
                 <div className="grid grid-cols-3 gap-2 text-xs">
@@ -66,7 +87,21 @@ function MealCard({ title, meal }: MealCardProps) {
       <CardHeader>
         <div className="flex justify-between items-center">
           <CardTitle className="text-lg">{title}</CardTitle>
-          {meal.portions && <span className="text-xs bg-secondary/60 rounded-full px-2 py-1">{meal.portions}x portion</span>}
+          {meal.portions && (
+            <div className="flex items-center gap-1">
+              <span className="text-xs bg-secondary/60 rounded-full px-2 py-1">{meal.portions}x portion</span>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HelpCircle className="h-4 w-4 text-muted-foreground cursor-pointer" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="text-xs">A single portion equals approximately {meal.singleServing || 100}g</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          )}
         </div>
         <CardDescription>{meal.name}</CardDescription>
       </CardHeader>

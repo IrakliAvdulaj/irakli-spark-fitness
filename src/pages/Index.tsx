@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { ArrowDown } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const Index = () => {
     
     if (user.email) {
       // If admin, redirect to admin dashboard
-      if (user.email === "avdulajirakli@gmail.com") {
+      if (user.email === "avdulajirakli@gmail.com" || localStorage.getItem("isAdmin") === "true") {
         navigate("/admin-dashboard");
         return;
       }
@@ -28,49 +29,172 @@ const Index = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
-      <div className="max-w-3xl mx-auto text-center space-y-8">
-        <h1 className="text-6xl font-bold text-gradient tracking-tight">
-          CoachIrakli
-        </h1>
-        
-        <p className="text-xl text-muted-foreground max-w-lg mx-auto">
-          Your personal coach for fitness goals, nutrition plans, and daily motivation.
-        </p>
-        
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-          <Button 
-            size="lg" 
-            className="px-8 py-6 text-lg"
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </Button>
-          <Button 
-            size="lg" 
-            variant="outline" 
-            className="px-8 py-6 text-lg"
-            onClick={() => navigate("/register")}
-          >
-            Sign Up
-          </Button>
+    <div className="min-h-screen flex flex-col items-center bg-background">
+      {/* Hero Section */}
+      <div className="w-full bg-gradient-to-br from-[#1A1F2C] to-[#2E1065] py-24 px-4 flex items-center justify-center">
+        <div className="max-w-6xl mx-auto text-center space-y-8">
+          <div className="animate-fade-in-up">
+            <h1 className="text-7xl font-extrabold text-gradient tracking-tight mb-4">
+              CoachIrakli
+            </h1>
+            <p className="text-2xl text-white/90 max-w-2xl mx-auto">
+              AI-Powered Fitness Coaching Tailored to Your Unique Body and Goals
+            </p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12 animate-fade-in-up animation-delay-200">
+            <Button 
+              size="lg" 
+              className="px-8 py-6 text-lg bg-[#8B5CF6] hover:bg-[#7E69AB] text-white"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="px-8 py-6 text-lg border-white/30 text-white hover:bg-white/10"
+              onClick={() => navigate("/register")}
+            >
+              Sign Up
+            </Button>
+          </div>
+          
+          <div className="mt-16 animate-bounce flex flex-col items-center">
+            <p className="text-white/70 mb-2">Discover More</p>
+            <ArrowDown className="text-white/70" size={24} />
+          </div>
+        </div>
+      </div>
+      
+      {/* Features Section */}
+      <div className="py-24 px-4 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gradient mb-4">Powered by Advanced Technology</h2>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Our platform combines cutting-edge AI with proven fitness science to create personalized experiences
+          </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           <FeatureCard 
-            title="Personalized Nutrition" 
-            description="Get meal plans and calorie targets tailored to your unique goals and body type."
+            title="AI-Driven Nutrition Analysis" 
+            description="Our machine learning algorithms analyze thousands of food combinations to create perfectly balanced meals that match your exact caloric needs."
+            icon="🧠"
           />
           <FeatureCard 
-            title="Progress Tracking" 
-            description="Monitor your fitness journey with easy-to-understand metrics and visualizations."
+            title="Precise Macro Tracking" 
+            description="Visual tracking of macronutrients with our intuitive circular graphs shows exactly how your diet breaks down to support your fitness goals."
+            icon="📊"
           />
           <FeatureCard 
-            title="Daily Motivation" 
-            description="Receive motivational content directly from Coach Irakli to keep you inspired."
+            title="Personalized Daily Motivation" 
+            description="Receive curated motivational content crafted by Coach Irakli to keep you inspired and accountable on your fitness journey."
+            icon="💪"
           />
         </div>
       </div>
+      
+      {/* How It Works Section */}
+      <div className="w-full bg-gradient-to-br from-[#E5DEFF] to-[#D6BCFA] dark:from-[#2E1065] dark:to-[#1A1F2C] py-24 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gradient mb-4">How It Works</h2>
+            <p className="text-xl text-foreground/80 max-w-3xl mx-auto">
+              Your fitness journey in three simple steps
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <StepCard 
+              number="1"
+              title="Complete Your Profile" 
+              description="Enter your body metrics, activity level, and specific fitness goals."
+            />
+            <StepCard 
+              number="2"
+              title="Get Your Personalized Plan" 
+              description="Receive an instantly calculated nutrition plan with exact macronutrients."
+            />
+            <StepCard 
+              number="3"
+              title="Track & Adjust" 
+              description="Update your profile as you progress to keep your plan optimal for your changing goals."
+            />
+          </div>
+          
+          <div className="flex justify-center mt-16">
+            <Button 
+              size="lg" 
+              className="px-8 py-6 text-lg bg-[#8B5CF6] hover:bg-[#7E69AB] text-white"
+              onClick={() => navigate("/register")}
+            >
+              Start Your Journey Now
+            </Button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Testimonials */}
+      <div className="py-24 px-4 max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gradient mb-4">Success Stories</h2>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Join thousands who've transformed their fitness with Coach Irakli
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <TestimonialCard 
+            quote="The personalized meal plans completely changed how I approach nutrition. I've lost 12kg in 3 months!"
+            name="Maria K."
+            role="Lost 12kg in 3 months"
+          />
+          <TestimonialCard 
+            quote="As an athlete, precise macros are critical. This app delivers exactly what I need to perform at my best."
+            name="David T."
+            role="Professional swimmer"
+          />
+          <TestimonialCard 
+            quote="The daily motivational posts keep me going. It's like having Coach Irakli in my pocket every day!"
+            name="Sophia J."
+            role="Gained muscle mass"
+          />
+        </div>
+      </div>
+      
+      {/* CTA Section */}
+      <div className="w-full bg-gradient-to-r from-[#6E59A5] to-[#8B5CF6] py-16 px-4">
+        <div className="max-w-4xl mx-auto text-center text-white">
+          <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Fitness?</h2>
+          <p className="text-xl mb-8">Join CoachIrakli today and get your personalized nutrition and fitness plan in minutes.</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button 
+              size="lg" 
+              className="px-8 py-5 text-lg bg-white text-[#6E59A5] hover:bg-gray-100"
+              onClick={() => navigate("/register")}
+            >
+              Sign Up Now
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="px-8 py-5 text-lg border-white text-white hover:bg-white/10"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </Button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Footer */}
+      <footer className="w-full py-8 px-4 bg-background border-t">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center">
+          <p className="text-lg font-semibold text-gradient mb-4 md:mb-0">CoachIrakli</p>
+          <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} CoachIrakli. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };
@@ -78,13 +202,51 @@ const Index = () => {
 interface FeatureCardProps {
   title: string;
   description: string;
+  icon: string;
 }
 
-const FeatureCard = ({ title, description }: FeatureCardProps) => {
+const FeatureCard = ({ title, description, icon }: FeatureCardProps) => {
   return (
-    <div className="glass-card p-6 rounded-lg text-center">
-      <h3 className="text-lg font-medium text-primary mb-2">{title}</h3>
+    <div className="glass-card p-8 rounded-lg text-center transition-transform hover:scale-105 duration-300">
+      <div className="text-4xl mb-4">{icon}</div>
+      <h3 className="text-xl font-medium text-primary mb-3">{title}</h3>
       <p className="text-muted-foreground">{description}</p>
+    </div>
+  );
+};
+
+interface StepCardProps {
+  number: string;
+  title: string;
+  description: string;
+}
+
+const StepCard = ({ number, title, description }: StepCardProps) => {
+  return (
+    <div className="flex flex-col items-center text-center">
+      <div className="h-16 w-16 rounded-full bg-[#8B5CF6] text-white text-2xl font-bold flex items-center justify-center mb-4">
+        {number}
+      </div>
+      <h3 className="text-xl font-medium mb-2">{title}</h3>
+      <p className="text-muted-foreground">{description}</p>
+    </div>
+  );
+};
+
+interface TestimonialCardProps {
+  quote: string;
+  name: string;
+  role: string;
+}
+
+const TestimonialCard = ({ quote, name, role }: TestimonialCardProps) => {
+  return (
+    <div className="glass-card p-6 rounded-lg">
+      <p className="text-lg mb-4">"{quote}"</p>
+      <div>
+        <p className="font-medium">{name}</p>
+        <p className="text-sm text-muted-foreground">{role}</p>
+      </div>
     </div>
   );
 };

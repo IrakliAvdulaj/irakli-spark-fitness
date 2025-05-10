@@ -32,14 +32,20 @@ export function AuthForm({ isLogin = true }: AuthFormProps) {
         
         if (error) throw error;
         
-        // Special case for admin
-        if (email === "avdulajirakli@gmail.com") {
+        // Check if admin email - IMPORTANT: Using lowercase to make the check case-insensitive
+        if (email.toLowerCase() === "avdulajirakli@gmail.com") {
+          // Set admin flag in localStorage for future auth checks
+          localStorage.setItem("isAdmin", "true");
+          
           toast({
             title: "Welcome back, Coach Irakli!",
             description: "You've been logged in as an administrator.",
           });
           navigate("/admin-dashboard");
           return;
+        } else {
+          // Not admin, clear any admin flags
+          localStorage.removeItem("isAdmin");
         }
         
         toast({

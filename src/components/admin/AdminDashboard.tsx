@@ -7,6 +7,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { PostsList } from "./PostsList";
 import { CreatePostForm } from "./CreatePostForm";
 import { EditPostForm } from "./EditPostForm";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Post {
   id: string;
@@ -25,22 +26,35 @@ export function AdminDashboard() {
   
   useEffect(() => {
     // Check if user is logged in and is admin
-    const user = JSON.parse(localStorage.getItem("user") || "{}");
-    if (!user.email || user.email !== "avdulajirakli@gmail.com") {
-      toast({
-        title: "Not authorized",
-        description: "You don't have permission to access the admin dashboard.",
-        variant: "destructive",
-      });
-      navigate("/login");
-      return;
-    }
+    const checkAdminStatus = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      const isAdmin = localStorage.getItem("isAdmin") === "true" || 
+                      (user?.email?.toLowerCase() === "avdulajirakli@gmail.com");
+      
+      if (!user || !isAdmin) {
+        toast({
+          title: "Not authorized",
+          description: "You don't have permission to access the admin dashboard.",
+          variant: "destructive",
+        });
+        navigate("/login");
+        return;
+      }
+      
+      // If we've confirmed admin status, set it in localStorage for future checks
+      if (isAdmin) {
+        localStorage.setItem("isAdmin", "true");
+      }
+      
+      // Load posts
+      const savedPosts = localStorage.getItem("motivational-posts");
+      if (savedPosts) {
+        setPosts(JSON.parse(savedPosts));
+      }
+    };
     
-    // Load posts
-    const savedPosts = localStorage.getItem("motivational-posts");
-    if (savedPosts) {
-      setPosts(JSON.parse(savedPosts));
-    }
+    checkAdminStatus();
   }, [navigate, toast]);
   
   const handleCreatePost = (post: Omit<Post, "id" | "date" | "author">) => {

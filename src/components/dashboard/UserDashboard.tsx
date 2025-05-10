@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,10 +10,14 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Json } from "@/integrations/supabase/types";
+import { Button } from "@/components/ui/button";
+import { MacronutrientChart } from "./MacronutrientChart";
+import { UpdateProfileForm } from "./UpdateProfileForm";
 
 export function UserDashboard() {
   const [fitnessData, setFitnessData] = useState<FitnessData | null>(null);
   const [userData, setUserData] = useState<any>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -131,11 +136,19 @@ export function UserDashboard() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     localStorage.removeItem("user");
+    localStorage.removeItem("isAdmin");
     toast({
       title: "Logged out",
       description: "You've been logged out successfully.",
     });
     navigate("/login");
+  };
+
+  const handleUpdateComplete = (updatedUserData: any) => {
+    setUserData(updatedUserData);
+    const updatedFitnessData = calculateFitnessData(updatedUserData);
+    setFitnessData(updatedFitnessData);
+    setIsUpdating(false);
   };
   
   if (!fitnessData || !userData) {
@@ -149,6 +162,30 @@ export function UserDashboard() {
       </div>
     );
   }
+
+  if (isUpdating) {
+    return (
+      <div className="container mx-auto py-6 px-4 space-y-8 max-w-7xl">
+        <div className="flex justify-between items-center">
+          <h1 className="text-3xl font-bold text-gradient">
+            Update Your Profile
+          </h1>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-secondary/60 hover:bg-secondary rounded-md text-sm"
+          >
+            Logout
+          </button>
+        </div>
+        
+        <UpdateProfileForm 
+          userData={userData} 
+          onUpdateComplete={handleUpdateComplete} 
+          onCancel={() => setIsUpdating(false)} 
+        />
+      </div>
+    );
+  }
   
   return (
     <div className="container mx-auto py-6 px-4 space-y-8 max-w-7xl">
@@ -156,16 +193,25 @@ export function UserDashboard() {
         <h1 className="text-3xl font-bold text-gradient">
           Your Fitness Dashboard
         </h1>
-        <button
-          onClick={handleLogout}
-          className="px-4 py-2 bg-secondary/60 hover:bg-secondary rounded-md text-sm"
-        >
-          Logout
-        </button>
+        <div className="space-x-4">
+          <Button 
+            variant="outline" 
+            onClick={() => setIsUpdating(true)}
+            className="px-4 py-2"
+          >
+            Update Profile
+          </Button>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 bg-secondary/60 hover:bg-secondary rounded-md text-sm"
+          >
+            Logout
+          </button>
+        </div>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="md:col-span-3 glass-card">
+        <Card className="md:col-span-2 glass-card">
           <CardHeader>
             <CardTitle className="text-xl">Your Daily Summary</CardTitle>
           </CardHeader>
@@ -179,6 +225,12 @@ export function UserDashboard() {
             />
           </CardContent>
         </Card>
+        
+        <MacronutrientChart
+          protein={fitnessData.protein}
+          carbs={fitnessData.carbs}
+          fat={fitnessData.fat}
+        />
       </div>
       
       <Tabs defaultValue="meal-plan" className="w-full">

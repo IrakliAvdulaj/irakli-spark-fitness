@@ -42,7 +42,7 @@ export function MealPlanView({ mealPlan }: MealPlanViewProps) {
                             <HelpCircle className="h-4 w-4 text-muted-foreground cursor-pointer" />
                           </TooltipTrigger>
                           <TooltipContent>
-                            <p className="text-xs">A single portion equals approximately {snack.singleServing || 100}g</p>
+                            <p className="text-xs">A single portion equals approximately {snack.portionSize || 100}g</p>
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -96,7 +96,7 @@ function MealCard({ title, meal }: MealCardProps) {
                     <HelpCircle className="h-4 w-4 text-muted-foreground cursor-pointer" />
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p className="text-xs">A single portion equals approximately {meal.singleServing || 100}g</p>
+                    <p className="text-xs">A single portion equals approximately {meal.portionSize || 100}g</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>

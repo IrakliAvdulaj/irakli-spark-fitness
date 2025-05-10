@@ -97,6 +97,7 @@ export function UserDashboard() {
           
           // Also save meal plan in Supabase for future reference
           try {
+            // Fix: The issue is here - we need to pass an object, not an array
             await supabase.from('meal_plans').upsert({
               user_id: user.id,
               calories: calculatedData.calories,

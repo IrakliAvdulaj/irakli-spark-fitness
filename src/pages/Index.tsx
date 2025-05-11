@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -94,8 +95,8 @@ const Index = () => {
                 <div className="glass-card rounded-lg overflow-hidden h-full flex flex-col">
                   <div className="relative">
                     <img 
-                      src="https://images.unsplash.com/photo-1611672585731-fa10603fb9e0?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3" 
-                      alt="Before and after transformation" 
+                      src="https://images.unsplash.com/photo-1599058917765-a780eda07a3e?q=80&w=2369&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                      alt="John's before and after transformation" 
                       className="w-full h-64 object-cover"
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
@@ -111,8 +112,8 @@ const Index = () => {
                 <div className="glass-card rounded-lg overflow-hidden h-full flex flex-col">
                   <div className="relative">
                     <img 
-                      src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3" 
-                      alt="Before and after transformation" 
+                      src="https://images.unsplash.com/photo-1571019613914-85f342c6a11e?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                      alt="Sarah's before and after transformation" 
                       className="w-full h-64 object-cover"
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
@@ -128,8 +129,8 @@ const Index = () => {
                 <div className="glass-card rounded-lg overflow-hidden h-full flex flex-col">
                   <div className="relative">
                     <img 
-                      src="https://images.unsplash.com/photo-1594882645126-14020914d58d?q=80&w=3085&auto=format&fit=crop&ixlib=rb-4.0.3" 
-                      alt="Before and after transformation" 
+                      src="https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                      alt="Mike's before and after transformation" 
                       className="w-full h-64 object-cover"
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
@@ -145,8 +146,8 @@ const Index = () => {
                 <div className="glass-card rounded-lg overflow-hidden h-full flex flex-col">
                   <div className="relative">
                     <img 
-                      src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3" 
-                      alt="Before and after transformation" 
+                      src="https://images.unsplash.com/photo-1583454155184-870a1f63aebc?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                      alt="Alex's before and after transformation" 
                       className="w-full h-64 object-cover"
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
@@ -162,8 +163,8 @@ const Index = () => {
                 <div className="glass-card rounded-lg overflow-hidden h-full flex flex-col">
                   <div className="relative">
                     <img 
-                      src="https://images.unsplash.com/photo-1500673922987-e212871fec22?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3" 
-                      alt="Before and after transformation" 
+                      src="https://images.unsplash.com/photo-1579758629938-03607ccdbaba?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                      alt="Emma's before and after transformation" 
                       className="w-full h-64 object-cover"
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
@@ -179,8 +180,8 @@ const Index = () => {
                 <div className="glass-card rounded-lg overflow-hidden h-full flex flex-col">
                   <div className="relative">
                     <img 
-                      src="https://images.unsplash.com/photo-1517022812141-23620dba5c23?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3" 
-                      alt="Before and after transformation" 
+                      src="https://images.unsplash.com/photo-1597076545399-91a3ff0e71b3?q=80&w=2370&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                      alt="David's before and after transformation" 
                       className="w-full h-64 object-cover"
                     />
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">

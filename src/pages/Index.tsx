@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -58,14 +57,14 @@ const Index = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12 animate-fade-in-up animation-delay-200">
             <Button 
               size="lg" 
-              className="px-8 py-6 text-lg bg-[#222222] hover:bg-[#333333] text-white border border-white/30"
+              className="px-8 py-6 text-lg bg-[#333333] hover:bg-[#444444] text-white border border-white/30"
               onClick={() => navigate("/login")}
             >
               Login
             </Button>
             <Button 
               size="lg" 
-              className="px-8 py-6 text-lg bg-[#222222] hover:bg-[#333333] text-white border border-white/30"
+              className="px-8 py-6 text-lg bg-[#333333] hover:bg-[#444444] text-white border border-white/30"
               onClick={() => navigate("/register")}
             >
               Sign Up
@@ -136,6 +135,57 @@ const Index = () => {
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
                       <p className="text-white text-lg font-bold">Mike's Progress</p>
                       <p className="text-white/80 text-sm">Transformed body composition in 4 months</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+              <div className="p-1 h-full">
+                <div className="glass-card rounded-lg overflow-hidden h-full flex flex-col">
+                  <div className="relative">
+                    <img 
+                      src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                      alt="Before and after transformation" 
+                      className="w-full h-64 object-cover"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                      <p className="text-white text-lg font-bold">Alex's Transformation</p>
+                      <p className="text-white/80 text-sm">Gained 10kg of muscle in 5 months</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+              <div className="p-1 h-full">
+                <div className="glass-card rounded-lg overflow-hidden h-full flex flex-col">
+                  <div className="relative">
+                    <img 
+                      src="https://images.unsplash.com/photo-1500673922987-e212871fec22?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                      alt="Before and after transformation" 
+                      className="w-full h-64 object-cover"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                      <p className="text-white text-lg font-bold">Emma's Journey</p>
+                      <p className="text-white/80 text-sm">Lost 8kg and toned up in 4 months</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+              <div className="p-1 h-full">
+                <div className="glass-card rounded-lg overflow-hidden h-full flex flex-col">
+                  <div className="relative">
+                    <img 
+                      src="https://images.unsplash.com/photo-1517022812141-23620dba5c23?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                      alt="Before and after transformation" 
+                      className="w-full h-64 object-cover"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                      <p className="text-white text-lg font-bold">David's Success</p>
+                      <p className="text-white/80 text-sm">Complete body recomposition in 6 months</p>
                     </div>
                   </div>
                 </div>
@@ -251,14 +301,14 @@ const Index = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
-              className="px-8 py-5 text-lg bg-[#222222] hover:bg-[#333333] text-white border border-white/30"
+              className="px-8 py-5 text-lg bg-[#333333] hover:bg-[#444444] text-white border border-white/30"
               onClick={() => navigate("/register")}
             >
               Sign Up Now
             </Button>
             <Button 
               size="lg" 
-              className="px-8 py-5 text-lg bg-[#222222] hover:bg-[#333333] text-white border border-white/30"
+              className="px-8 py-5 text-lg bg-[#333333] hover:bg-[#444444] text-white border border-white/30"
               onClick={() => navigate("/login")}
             >
               Login

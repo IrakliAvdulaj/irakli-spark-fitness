@@ -28,7 +28,7 @@ export function MealPlanView({ mealPlan }: MealPlanViewProps) {
                   <h4 className="font-medium">{snack.name}</h4>
                   {snack.portions && (
                     <span className="text-xs bg-secondary/60 rounded-full px-2 py-1">
-                      {snack.portions === 1 ? '100g' : `${snack.portions * 100}g`}
+                      1 portion
                     </span>
                   )}
                 </div>
@@ -72,7 +72,7 @@ function MealCard({ title, meal }: MealCardProps) {
           <CardTitle className="text-lg">{title}</CardTitle>
           {meal.portions && (
             <span className="text-xs bg-secondary/60 rounded-full px-2 py-1">
-              {meal.portions === 1 ? '100g' : `${meal.portions * 100}g`}
+              1 portion
             </span>
           )}
         </div>

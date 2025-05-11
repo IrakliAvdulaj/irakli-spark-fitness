@@ -20,7 +20,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       lunch: {
         name: "Grilled Chicken & Quinoa",
-        description: "100g grilled chicken breast, 1 cup cooked quinoa, mixed greens with olive oil & vinegar",
+        description: "Grilled chicken breast, 1 cup cooked quinoa, mixed greens with olive oil & vinegar",
         calories: 500,
         protein: 35,
         carbs: 48,
@@ -29,7 +29,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       dinner: {
         name: "Salmon & Vegetables",
-        description: "120g salmon, 1 cup steamed broccoli, 1/2 cup sweet potato",
+        description: "Salmon, 1 cup steamed broccoli, 1/2 cup sweet potato",
         calories: 450,
         protein: 30,
         carbs: 30,
@@ -53,7 +53,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       lunch: {
         name: "Turkey & Rice",
-        description: "120g grilled turkey, 1/2 cup brown rice, steamed vegetables",
+        description: "Grilled turkey, 1/2 cup brown rice, steamed vegetables",
         calories: 450,
         protein: 40,
         carbs: 40,
@@ -62,7 +62,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       dinner: {
         name: "Cod with Greens",
-        description: "150g cod, 1 cup mixed greens with olive oil, 1 slice whole grain bread",
+        description: "Cod, 1 cup mixed greens with olive oil, 1 slice whole grain bread",
         calories: 400,
         protein: 35,
         carbs: 25,
@@ -96,7 +96,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       lunch: {
         name: "Grilled Chicken & Couscous",
-        description: "120g grilled chicken, 1/2 cup couscous, salad with 1 tbsp olive oil",
+        description: "Grilled chicken, 1/2 cup couscous, salad with 1 tbsp olive oil",
         calories: 480,
         protein: 40,
         carbs: 35,
@@ -105,7 +105,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       dinner: {
         name: "Lean Beef & Sweet Potato",
-        description: "100g lean beef, 3/4 cup mashed sweet potato, asparagus",
+        description: "Lean beef, 3/4 cup mashed sweet potato, asparagus",
         calories: 450,
         protein: 30,
         carbs: 40,
@@ -200,7 +200,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       dinner: {
         name: "Salmon & Quinoa",
-        description: "150g salmon, 1 cup quinoa, 1 cup spinach with olive oil",
+        description: "Salmon, 1 cup quinoa, 1 cup spinach with olive oil",
         calories: 550,
         protein: 40,
         carbs: 45,
@@ -210,7 +210,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       snacks: [
         {
           name: "Greek Yogurt with Honey",
-          description: "Greek yogurt (150g) + 1 tbsp honey + berries",
+          description: "Greek yogurt + 1 tbsp honey + berries",
           calories: 200,
           protein: 15,
           carbs: 25,
@@ -243,7 +243,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       lunch: {
         name: "Lean Beef & Sweet Potato",
-        description: "150g lean beef, 1 cup sweet potato, 1 cup steamed green beans",
+        description: "Lean beef, 1 cup sweet potato, 1 cup steamed green beans",
         calories: 500,
         protein: 42,
         carbs: 50,
@@ -252,7 +252,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       dinner: {
         name: "Chicken Thigh & Rice",
-        description: "200g chicken thigh, 3/4 cup brown rice, mixed veggies sautéed in olive oil",
+        description: "Chicken thigh, 3/4 cup brown rice, mixed veggies sautéed in olive oil",
         calories: 550,
         protein: 45,
         carbs: 40,
@@ -295,7 +295,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       lunch: {
         name: "Grilled Chicken & Rice",
-        description: "150g grilled chicken, 1 cup white rice, grilled zucchini and bell pepper",
+        description: "Grilled chicken, 1 cup white rice, grilled zucchini and bell pepper",
         calories: 550,
         protein: 45,
         carbs: 60,
@@ -304,7 +304,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       dinner: {
         name: "Baked Salmon & Potatoes",
-        description: "150g baked salmon, 1/2 cup mashed potatoes, steamed asparagus",
+        description: "Baked salmon, 1/2 cup mashed potatoes, steamed asparagus",
         calories: 500,
         protein: 40,
         carbs: 30,
@@ -323,7 +323,7 @@ export const mealPlans: PredefinedMealPlan[] = [
         },
         {
           name: "Cottage Cheese & Flax",
-          description: "Cottage cheese (150g) + 1 tbsp flax seeds",
+          description: "Cottage cheese + 1 tbsp flax seeds",
           calories: 200,
           protein: 24,
           carbs: 6,
@@ -347,7 +347,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       lunch: {
         name: "Chicken & Quinoa",
-        description: "180g grilled chicken breast, 1 cup cooked quinoa, 1 cup roasted vegetables, olive oil drizzle",
+        description: "Grilled chicken breast, 1 cup cooked quinoa, 1 cup roasted vegetables, olive oil drizzle",
         calories: 600,
         protein: 50,
         carbs: 50,
@@ -356,7 +356,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       dinner: {
         name: "Lean Beef & Sweet Potato",
-        description: "180g lean beef, 1 cup sweet potato, 1 cup broccoli sautéed in coconut oil",
+        description: "Lean beef, 1 cup sweet potato, 1 cup broccoli sautéed in coconut oil",
         calories: 550,
         protein: 45,
         carbs: 45,
@@ -375,7 +375,7 @@ export const mealPlans: PredefinedMealPlan[] = [
         },
         {
           name: "Protein Snack",
-          description: "1 boiled egg, 30g almonds, Greek yogurt (150g)",
+          description: "1 boiled egg, 30g almonds, Greek yogurt",
           calories: 350,
           protein: 25,
           carbs: 10,
@@ -399,7 +399,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       lunch: {
         name: "Turkey & Rice",
-        description: "200g grilled turkey, 1 cup brown rice, grilled vegetables, 1 tbsp olive oil",
+        description: "Grilled turkey, 1 cup brown rice, grilled vegetables, 1 tbsp olive oil",
         calories: 650,
         protein: 55,
         carbs: 60,
@@ -408,12 +408,12 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       dinner: {
         name: "Salmon & Rice",
-        description: "200g salmon, 1 cup white rice, mixed greens with dressing",
+        description: "Salmon, 1 cup white rice, mixed greens with dressing",
         calories: 600,
         protein: 45,
         carbs: 50,
         fat: 25,
- portions: 1
+        portions: 1
       },
       snacks: [
         {
@@ -460,7 +460,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       lunch: {
         name: "Chicken & Rice",
-        description: "200g grilled chicken, 1.5 cups rice, 1 tbsp olive oil, side of spinach",
+        description: "Grilled chicken, 1.5 cups rice, 1 tbsp olive oil, side of spinach",
         calories: 700,
         protein: 50,
         carbs: 80,
@@ -469,7 +469,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       dinner: {
         name: "Beef & Potatoes",
-        description: "200g beef, 1 cup mashed potatoes, 1 cup vegetables sautéed in olive oil",
+        description: "Beef, 1 cup mashed potatoes, 1 cup vegetables sautéed in olive oil",
         calories: 650,
         protein: 50,
         carbs: 50,
@@ -488,7 +488,7 @@ export const mealPlans: PredefinedMealPlan[] = [
         },
         {
           name: "Nuts & Cottage Cheese",
-          description: "30g almonds, cottage cheese (150g)",
+          description: "Almonds, cottage cheese",
           calories: 350,
           protein: 25,
           carbs: 10,
@@ -521,7 +521,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       lunch: {
         name: "Salmon & Rice",
-        description: "200g grilled salmon, 1.5 cups rice, 1 tbsp olive oil, steamed broccoli",
+        description: "Grilled salmon, 1.5 cups rice, 1 tbsp olive oil, steamed broccoli",
         calories: 700,
         protein: 50,
         carbs: 70,
@@ -530,7 +530,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       dinner: {
         name: "Beef Stir-Fry & Rice",
-        description: "200g beef stir-fry, 1 cup rice, veggies in olive oil",
+        description: "Beef stir-fry, 1 cup rice, veggies in olive oil",
         calories: 700,
         protein: 50,
         carbs: 70,
@@ -582,7 +582,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       lunch: {
         name: "Large Chicken & Rice",
-        description: "220g grilled chicken, 2 cups rice, steamed vegetables with olive oil",
+        description: "Grilled chicken, 2 cups rice, steamed vegetables with olive oil",
         calories: 750,
         protein: 60,
         carbs: 90,
@@ -591,7 +591,7 @@ export const mealPlans: PredefinedMealPlan[] = [
       },
       dinner: {
         name: "Beef & Sweet Potato",
-        description: "220g beef, 1.5 cups sweet potato, greens with oil",
+        description: "Beef, 1.5 cups sweet potato, greens with oil",
         calories: 700,
         protein: 55,
         carbs: 70,
@@ -610,7 +610,7 @@ export const mealPlans: PredefinedMealPlan[] = [
         },
         {
           name: "High-Protein Snack",
-          description: "2 boiled eggs, 30g almonds, 1 apple",
+          description: "2 boiled eggs, almonds, 1 apple",
           calories: 400,
           protein: 20,
           carbs: 25,

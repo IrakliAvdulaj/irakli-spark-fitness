@@ -1,13 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { MealPlan, Meal } from "@/utils/fitnessCalculator";
-import { 
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { HelpCircle } from "lucide-react";
 
 interface MealPlanViewProps {
   mealPlan: MealPlan;
@@ -34,19 +27,9 @@ export function MealPlanView({ mealPlan }: MealPlanViewProps) {
                 <div className="flex justify-between items-center">
                   <h4 className="font-medium">{snack.name}</h4>
                   {snack.portions && (
-                    <div className="flex items-center gap-1">
-                      <span className="text-xs bg-secondary/60 rounded-full px-2 py-1">{snack.portions}x portion</span>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="h-4 w-4 text-muted-foreground cursor-pointer" />
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p className="text-xs">A single portion equals approximately {snack.portions ? (100 / snack.portions).toFixed(0) : 100}g</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
+                    <span className="text-xs bg-secondary/60 rounded-full px-2 py-1">
+                      {snack.portions === 1 ? '100g' : `${snack.portions * 100}g`}
+                    </span>
                   )}
                 </div>
                 <p className="text-sm text-muted-foreground">{snack.description}</p>
@@ -88,19 +71,9 @@ function MealCard({ title, meal }: MealCardProps) {
         <div className="flex justify-between items-center">
           <CardTitle className="text-lg">{title}</CardTitle>
           {meal.portions && (
-            <div className="flex items-center gap-1">
-              <span className="text-xs bg-secondary/60 rounded-full px-2 py-1">{meal.portions}x portion</span>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <HelpCircle className="h-4 w-4 text-muted-foreground cursor-pointer" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="text-xs">A single portion equals approximately {meal.portions ? (100 / meal.portions).toFixed(0) : 100}g</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
+            <span className="text-xs bg-secondary/60 rounded-full px-2 py-1">
+              {meal.portions === 1 ? '100g' : `${meal.portions * 100}g`}
+            </span>
           )}
         </div>
         <CardDescription>{meal.name}</CardDescription>

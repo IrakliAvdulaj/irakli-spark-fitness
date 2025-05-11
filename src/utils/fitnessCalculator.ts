@@ -1,4 +1,3 @@
-
 import { getNearestMealPlan } from "./mealPlans";
 
 interface UserData {
@@ -67,8 +66,6 @@ export function calculateFitnessData(userData: UserData): FitnessData {
   let tdee = bmr * activityMultiplier;
   
   // Calculate calories based on goal and goal amount
-  // 1kg of fat is approximately 7700 calories
-  // So to lose/gain 0.5kg per week, we need a deficit/surplus of 3850 calories per week, or 550 per day
   let calories;
   switch (userData.goal) {
     case 'lose': 
@@ -118,10 +115,11 @@ export function calculateFitnessData(userData: UserData): FitnessData {
   const carbs = Math.round((calories * carbRatio) / 4);      // 4 calories per gram of carbs
   
   // Get the appropriate meal plan based on calculated calories
-  const mealPlan = getNearestMealPlan(Math.round(calories));
+  const roundedCalories = Math.round(calories);
+  const mealPlan = getNearestMealPlan(roundedCalories);
   
   return {
-    calories: Math.round(calories),
+    calories: roundedCalories,
     protein,
     carbs,
     fat,

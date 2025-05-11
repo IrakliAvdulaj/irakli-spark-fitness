@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { 
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -50,15 +58,14 @@ const Index = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12 animate-fade-in-up animation-delay-200">
             <Button 
               size="lg" 
-              className="px-8 py-6 text-lg bg-[#8B5CF6] hover:bg-[#7E69AB] text-white"
+              className="px-8 py-6 text-lg bg-[#222222] hover:bg-[#333333] text-white border border-white/30"
               onClick={() => navigate("/login")}
             >
               Login
             </Button>
             <Button 
               size="lg" 
-              variant="outline" 
-              className="px-8 py-6 text-lg border-white/30 text-white hover:bg-white/10"
+              className="px-8 py-6 text-lg bg-[#222222] hover:bg-[#333333] text-white border border-white/30"
               onClick={() => navigate("/register")}
             >
               Sign Up
@@ -70,6 +77,74 @@ const Index = () => {
             <ArrowDown className="text-white/70" size={24} />
           </div>
         </div>
+      </div>
+      
+      {/* Transformation Carousel Section */}
+      <div className="py-12 px-4 w-full max-w-6xl mx-auto">
+        <div className="text-center mb-10">
+          <h2 className="text-4xl font-bold text-gradient mb-4">Real Transformations</h2>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            See the incredible results our clients have achieved with Coach Irakli's plans
+          </p>
+        </div>
+        
+        <Carousel className="w-full max-w-4xl mx-auto">
+          <CarouselContent>
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+              <div className="p-1 h-full">
+                <div className="glass-card rounded-lg overflow-hidden h-full flex flex-col">
+                  <div className="relative">
+                    <img 
+                      src="https://images.unsplash.com/photo-1611672585731-fa10603fb9e0?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                      alt="Before and after transformation" 
+                      className="w-full h-64 object-cover"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                      <p className="text-white text-lg font-bold">John's Journey</p>
+                      <p className="text-white/80 text-sm">Lost 15kg in 6 months</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+              <div className="p-1 h-full">
+                <div className="glass-card rounded-lg overflow-hidden h-full flex flex-col">
+                  <div className="relative">
+                    <img 
+                      src="https://images.unsplash.com/photo-1605296867304-46d5465a13f1?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                      alt="Before and after transformation" 
+                      className="w-full h-64 object-cover"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                      <p className="text-white text-lg font-bold">Sarah's Story</p>
+                      <p className="text-white/80 text-sm">Gained muscle definition in 3 months</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CarouselItem>
+            <CarouselItem className="md:basis-1/2 lg:basis-1/3">
+              <div className="p-1 h-full">
+                <div className="glass-card rounded-lg overflow-hidden h-full flex flex-col">
+                  <div className="relative">
+                    <img 
+                      src="https://images.unsplash.com/photo-1594882645126-14020914d58d?q=80&w=3085&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                      alt="Before and after transformation" 
+                      className="w-full h-64 object-cover"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                      <p className="text-white text-lg font-bold">Mike's Progress</p>
+                      <p className="text-white/80 text-sm">Transformed body composition in 4 months</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CarouselItem>
+          </CarouselContent>
+          <CarouselPrevious className="left-0 lg:-left-12" />
+          <CarouselNext className="right-0 lg:-right-12" />
+        </Carousel>
       </div>
       
       {/* Features Section */}
@@ -176,15 +251,14 @@ const Index = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
-              className="px-8 py-5 text-lg bg-white text-[#6E59A5] hover:bg-gray-100"
+              className="px-8 py-5 text-lg bg-[#222222] hover:bg-[#333333] text-white border border-white/30"
               onClick={() => navigate("/register")}
             >
               Sign Up Now
             </Button>
             <Button 
               size="lg" 
-              variant="outline" 
-              className="px-8 py-5 text-lg border-white text-white hover:bg-white/10"
+              className="px-8 py-5 text-lg bg-[#222222] hover:bg-[#333333] text-white border border-white/30"
               onClick={() => navigate("/login")}
             >
               Login

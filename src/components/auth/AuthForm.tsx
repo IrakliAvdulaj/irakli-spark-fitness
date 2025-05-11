@@ -148,14 +148,14 @@ export function AuthForm({ isLogin = true }: AuthFormProps) {
             type="button" 
             variant="outline" 
             onClick={() => navigate(isLogin ? "/register" : "/login")}
-            className="border-primary/50 hover:bg-primary/10"
+            className="border-primary/50 hover:bg-primary/10 text-foreground"
           >
             {isLogin ? "Create account" : "Back to login"}
           </Button>
           <Button 
             type="submit" 
             disabled={loading}
-            className="bg-coach-dark hover:bg-coach-dark/90"
+            className="bg-[#222222] hover:bg-[#333333] text-white"
           >
             {loading ? "Processing..." : isLogin ? "Login" : "Register"}
           </Button>

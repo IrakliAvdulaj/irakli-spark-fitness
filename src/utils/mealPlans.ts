@@ -1,4 +1,3 @@
-
 import { MealPlan } from "./fitnessCalculator";
 
 export interface PredefinedMealPlan {
@@ -414,7 +413,7 @@ export const mealPlans: PredefinedMealPlan[] = [
         protein: 45,
         carbs: 50,
         fat: 25,
-        portions: 1
+ portions: 1
       },
       snacks: [
         {

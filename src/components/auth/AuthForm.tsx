@@ -148,10 +148,15 @@ export function AuthForm({ isLogin = true }: AuthFormProps) {
             type="button" 
             variant="outline" 
             onClick={() => navigate(isLogin ? "/register" : "/login")}
+            className="border-primary/50 hover:bg-primary/10"
           >
             {isLogin ? "Create account" : "Back to login"}
           </Button>
-          <Button type="submit" disabled={loading}>
+          <Button 
+            type="submit" 
+            disabled={loading}
+            className="bg-coach-dark hover:bg-coach-dark/90"
+          >
             {loading ? "Processing..." : isLogin ? "Login" : "Register"}
           </Button>
         </CardFooter>
